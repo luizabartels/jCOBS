@@ -1,8 +1,4 @@
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
-
 import static java.util.Arrays.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -67,16 +63,13 @@ public class Main {
         return decoded;
     }
 
-    public static char[] calculateXORchecksum(char[] input)
+    public static int calculateXORchecksum(char[] input)
     {
         int crc = 0;
-        char[] result = new char[1];
 
         for(int i = 0; i < input.length; i++) crc ^= input[i];
 
-        result[0] = (char) crc;
-
-        return result;
+        return crc;
     }
 
     public static void main(String[] args) {
@@ -91,31 +84,24 @@ public class Main {
 
         System.arraycopy(encodeCOBS(testerBuffer), 0, resultEncoded, 0, maxIndexEncoded);
 
-        char[] xorChecksum = new char[1];
-        calculateXORchecksum(testerBuffer); // Calculate XORchecksum
+        char xorChecksum = (char) calculateXORchecksum(testerBuffer); // Calculate XORchecksum
+        char[] xorCheckSumArray = new char[]{xorChecksum};
+
         char[] encodedWithXor = new char[resultEncoded.length + 1]; // Encoded length + the CheckSum byte
 
         System.arraycopy(resultEncoded, 0, encodedWithXor, 0, resultEncoded.length);
-        System.arraycopy(xorChecksum, 0, encodedWithXor, resultEncoded.length, 1);
+        System.arraycopy(xorCheckSumArray, 0, encodedWithXor, resultEncoded.length, xorCheckSumArray.length);
 
-        int bufferLength = resultEncoded.length + 2; // Plus two is for the checksum and length bytes
-//
-//        char[] bufferToSend = new char[2];
-//        bufferToSend[0] = 0;
-//        bufferToSend[1] = (char) bufferLength;
-//
-//
-//        int maxIndexDecoded = resultEncoded.length - 1;
-//        char[] resultDecoded = new char[maxIndexDecoded];
-//
-//        for(int i = 0; i < maxIndexDecoded; i++)
-//        {
-//            resultDecoded[i] = decodeCOBS(resultEncoded)[i];
-//        }
-//
-//
-//
-//        int i = 0;
+        int bufferLength = resultEncoded.length + 1; // For the checksum and length bytes
+
+        char[] startByteAndLength = new char[]{0, (char) bufferLength};
+
+        char[] bufferToSend = new char[encodedWithXor.length + startByteAndLength.length];
+
+        System.arraycopy(startByteAndLength, 0, bufferToSend, 0, startByteAndLength.length);
+        System.arraycopy(encodedWithXor, 0, bufferToSend, startByteAndLength.length, encodedWithXor.length);
+
+        /* TODO: Figure out how UDP communication happens. If all bytes are received togheather or it naturally serializes each of them */
 
     }
 }
