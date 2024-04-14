@@ -1,8 +1,3 @@
-import java.util.Arrays;
-import static java.util.Arrays.*;
-
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
 
     public static char[] encodeCOBS(char[] input)
@@ -67,7 +62,7 @@ public class Main {
     {
         int crc = 0;
 
-        for(int i = 0; i < input.length; i++) crc ^= input[i];
+        for (char c : input) crc ^= c;
 
         return crc;
     }
