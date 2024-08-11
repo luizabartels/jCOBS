@@ -1,4 +1,5 @@
 package com.myapp.server;
+import com.myapp.COBS.COBSEncDec;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -7,32 +8,13 @@ import java.util.Arrays;
 
 public class UDPServer {
 
-    public static char[] decodeCOBS(char[] input)
-    {
-        int len = input.length;
-        char[] decoded = new char[len];
+    public static char[] processBuffer2Decode(char[] buffer){
+        int bufferLength = buffer.length;
+        char[] dataFrame = new char[bufferLength - 2];
 
-        int zeroPosition = input[0]; // first element of the encoded input will points to the first zero position
+        System.arraycopy(buffer, 2, dataFrame, 0, dataFrame.length);
 
-        for(int i = 1; i < len; i++)
-        {
-            int decodedIndex = i - 1;
-
-            if(input[i] == 0) continue;
-
-            if(i == zeroPosition)
-            {
-                //System.out.println("Zero");
-                zeroPosition += input[i];
-                decoded[decodedIndex] = 0;
-            }
-            else
-            {
-                //System.out.println("Não zero");
-                decoded[decodedIndex] = input[i];
-            }
-        }
-        return decoded;
+        return COBSEncDec.decodeCOBS(dataFrame);
     }
 
     public static void main(String[] args) {
@@ -52,8 +34,7 @@ public class UDPServer {
                 System.out.println("Length(): " + receivedMessage.length());
 
                 char[] buffer2Decode = receivedMessage.toCharArray();
-                char[] bufferDecoded = decodeCOBS(buffer2Decode);
-
+                char[] bufferDecoded = processBuffer2Decode(buffer2Decode);
 
                 String str = new String(bufferDecoded);
                 byte[] responseBuffer = str.getBytes(StandardCharsets.UTF_8);

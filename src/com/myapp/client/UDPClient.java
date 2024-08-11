@@ -27,15 +27,11 @@ public class UDPClient {
 
             String responseMessage = new String(responsePacket.getData(), 0, responsePacket.getLength());
             System.out.println("Received from com.myapp.server: " + responseMessage);
+
+            int i = 0;
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void initClient()
-    {
-        final String SERVER_ADDRESS = "localhost";
-        final int SERVER_PORT = 9876;
     }
 
 }
