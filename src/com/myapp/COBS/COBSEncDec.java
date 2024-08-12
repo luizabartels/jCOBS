@@ -19,17 +19,25 @@ public class COBSEncDec {
 
             if(input[i] == 0) continue;
 
+            System.out.println("Zero position");
+            System.out.println(zeroPosition);
+            System.out.println("i");
+            System.out.println(i);
+
             if(i == zeroPosition)
             {
-                //System.out.println("Zero");
+                System.out.println("Zero - if: valor buffer");
+                System.out.println((int) input[i]);
                 zeroPosition += input[i];
                 decoded[decodedIndex] = 0;
             }
             else
             {
-                //System.out.println("Não zero");
+                System.out.println("Não zero - if: valor buffer");
+                System.out.println((int) input[i]);
                 decoded[decodedIndex] = input[i];
             }
+
         }
         return decoded;
     }
